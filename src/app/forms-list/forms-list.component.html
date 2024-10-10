@@ -1,0 +1,85 @@
+<div class="forms-container">
+  <header class="header">
+    <h1 class="title">Available Forms</h1>
+    <div class="search-bar">
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search forms..."
+        (input)="onSearchInput($event)"
+        aria-label="Search forms"
+      />
+      <button class="search-button">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="forms-grid">
+    <div *ngFor="let form of filteredForms" class="form-card">
+      <div class="form-card-header">
+        <h2 class="form-title">{{ form.title }}</h2>
+      </div>
+      <div class="form-card-body">
+        <p class="form-description">{{ form.description }}</p>
+        <p class="form-dates">Last Modified: {{ form.lastModificationDate | date:'shortDate' }}</p>
+
+        <div class="form-actions">
+          <div class="like-dislike-container">
+            <button class="like-button" (click)="likeForm(form.idForm)" aria-label="Like this form">
+              <i class="fas fa-thumbs-up"></i>
+            </button>
+            <span class="like-count">{{ form.likesCount }}</span>
+            <button class="dislike-button" (click)="dislikeForm(form.idForm)" aria-label="Dislike this form">
+              <i class="fas fa-thumbs-down"></i>
+            </button>
+            <span class="dislike-count">{{ form.dislikesCount }}</span>
+          </div>
+
+          <button class="view-button" (click)="openCommentsModal(form)">
+            Comments
+          </button>
+
+          <button class="view-button" (click)="viewForm(form.idForm)">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Comments -->
+  <div class="modal" id="commentsModal" *ngIf="selectedForm">
+    <div class="modal-overlay" (click)="closeCommentsModal()"></div>
+    <div class="modal-content">
+      <span class="close" (click)="closeCommentsModal()" aria-label="Close comments modal">&times;</span>
+      <h2 class="modal-title">Comments for {{ selectedForm.title }}</h2>
+
+      <div class="comments-section">
+        <div *ngFor="let comment of selectedForm.comments" class="comment">
+          <div class="comment-header">
+            <p class="comment-author">{{ comment.user.username }}</p>
+            <span class="comment-date">{{ comment.commentDate | date: 'short' }}</span>
+          </div>
+          <p class="comment-text">{{ comment.commentText }}</p>
+        </div>
+      </div>
+
+      <div class="add-comment-section">
+      <textarea
+        [(ngModel)]="newCommentText"
+        placeholder="Add a comment..."
+        aria-label="New comment"
+        rows="3"
+        class="new-comment-input"
+      ></textarea>
+        <button
+          class="submit-comment-button"
+          (click)="addComment(selectedForm.idForm, newCommentText)"
+          [disabled]="!newCommentText"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

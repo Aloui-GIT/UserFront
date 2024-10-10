@@ -1,0 +1,17 @@
+/* Ensure profile pictures are consistently sized */
+.avatar img {
+  width: 40px; /* Adjust size as needed */
+  height: 40px; /* Adjust size as needed */
+  object-fit: cover; /* Ensure image covers the area */
+  border-radius: 50%; /* Make it circular */
+}
+
+/* Additional styling for dropdown */
+.dropdown-menu {
+  min-width: 200px; /* Adjust width as needed */
+}
+
+.dropdown-item .avatar {
+  width: 40px; /* Consistent size in dropdown */
+  height: 40px; /* Consistent size in dropdown */
+}

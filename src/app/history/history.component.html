@@ -1,0 +1,47 @@
+<br><br><br>
+<div class="history-container">
+  <header class="header">
+    <h1 class="title">Your Submission History</h1>
+    <div class="sorting-options">
+      <h3>Sort by:</h3>
+      <div class="button-group">
+        <button (click)="sortSubmissionHistory('formTitle')">Form Title</button>
+        <button (click)="sortSubmissionHistory('submissionDate')">Submission Date</button>
+        <button (click)="sortSubmissionHistory('timeSpent')">Time Spent</button>
+      </div>
+    </div>
+  </header>
+
+  <div *ngIf="paginatedHistory.length > 0; else noHistory">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover history-table">
+        <thead>
+        <tr>
+          <th>Form Title</th>
+          <th>Submission Date</th>
+          <th>Time Spent (seconds)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let submission of paginatedHistory">
+          <td>{{ submission.forms?.[0]?.title || 'N/A' }}</td>
+          <td>{{ submission.dateSubmission | date: 'short' }}</td>
+          <td>{{ submission.timeSpent || 'N/A' }}</td>
+
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-pagination
+      [totalItems]="submissionHistory.length"
+      [itemsPerPage]="itemsPerPage"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
+  </div>
+
+  <ng-template #noHistory>
+    <p class="no-history-message">No submission history found.</p>
+  </ng-template>
+</div>
+
+

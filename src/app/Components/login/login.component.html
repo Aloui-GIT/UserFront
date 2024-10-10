@@ -1,0 +1,70 @@
+<app-loading [isLoading]="isLoading"></app-loading>
+
+<!DOCTYPE html>
+<html lang="en" class="light-style customizer-hide" dir="ltr" data-theme="theme-default" data-assets-path="assets/" data-template="vertical-menu-template-free">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <title>Login Basic - Pages | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+  <meta name="description" content="" />
+</head>
+<body>
+<!-- Content -->
+<div class="container-xxl">
+  <div class="authentication-wrapper authentication-basic container-p-y">
+    <div class="authentication-inner">
+      <!-- Register -->
+      <div class="card">
+        <div class="card-body">
+          <!-- Logo -->
+          <div class="app-brand justify-content-center">
+            <a href="index.html" class="app-brand-link gap-2">
+              <span class="app-brand-logo demo">
+                <!-- SVG Logo -->
+                <!-- (Include your SVG here) -->
+              </span>
+
+            </a>
+          </div>
+          <!-- /Logo -->
+          <h4 class="mb-2">Welcome to Medianet-Forms! 👋</h4>
+          <p class="mb-4">Please sign-in to your account and start the adventure</p>
+
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mb-3">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email or Username</label>
+              <input type="text" id="email" class="form-control" formControlName="username" placeholder="Enter your email or username" autofocus />
+            </div>
+            <div class="mb-3 form-password-toggle">
+
+              <div class="input-group input-group-merge">
+                <input type="password" id="password" class="form-control" formControlName="password" placeholder="············" aria-describedby="password" />
+                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+              </div>
+              <!-- Forgot Password Link -->
+              <div class="d-flex justify-content-between mb-4">
+                <a href="javascript:void(0)" (click)="onForgotPassword()" class="text-body forgot-password-link">Forgot Password?</a>
+              </div>
+            </div>
+
+            <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+          </form>
+
+          <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+            {{ errorMessage }}
+          </div>
+
+          <p class="text-center">
+            <span>New on our platform?</span>
+            <a href="register">
+              <span>Create an account</span>
+            </a>
+          </p>
+        </div>
+      </div>
+      <!-- /Register -->
+    </div>
+  </div>
+</div>
+</body>
+</html>

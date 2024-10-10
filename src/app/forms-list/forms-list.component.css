@@ -1,0 +1,371 @@
+.forms-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.search-bar {
+  position: relative;
+  width: 300px;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 15px;
+  border: 2px solid #ccc;
+  border-radius: 50px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s ease-in-out;
+}
+
+.search-input:focus {
+  border-color: #007bff;
+}
+
+.search-button {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+  font-size: 1.2rem;
+  padding: 5px;
+}
+
+.search-button:hover {
+  color: #0056b3;
+}
+
+/* Modified CSS for forms */
+.forms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.form-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.form-card-header {
+  background-color: #f7f7f7; /* Neutral background for the header */
+  color: #333;
+  padding: 15px;
+  border-bottom: 1px solid #eaeaea; /* Subtle border for separation */
+  text-align: center;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.form-card-body {
+  padding: 15px;
+  flex-grow: 1;
+}
+
+.form-description {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.form-dates {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.like-dislike-container {
+  display: flex;
+  align-items: center;
+}
+
+.like-button,
+.dislike-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+  font-size: 1.2rem;
+}
+
+.like-button:hover,
+.dislike-button:hover {
+  color: #0056b3;
+}
+
+.like-count,
+.dislike-count {
+  margin: 0 10px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.view-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.view-button:hover {
+  background-color: #218838;
+}
+
+/* Modal styling */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.close:hover {
+  color: #999;
+}
+
+.comments-section {
+  margin-top: 20px;
+}
+
+.comment {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.comment-author {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.comment-text {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.submit-comment-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.submit-comment-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.submit-comment-button:hover:enabled {
+  background-color: #0056b3;
+}
+/* Modal Background Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Modal Content */
+.modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+/* Close Button */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #888;
+}
+
+.close:hover {
+  color: #555;
+}
+
+/* Comments Section */
+.comments-section {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.comment {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #007bff;
+  font-size: 1rem;
+}
+
+.comment-date {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.comment-text {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* New Comment Section */
+.add-comment-section {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.new-comment-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.new-comment-input:focus {
+  border-color: #007bff;
+}
+
+.submit-comment-button {
+  align-self: flex-end;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.submit-comment-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.submit-comment-button:hover:enabled {
+  background-color: #0056b3;
+}
+
+/* Modal animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}

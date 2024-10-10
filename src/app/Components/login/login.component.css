@@ -1,0 +1,160 @@
+/* Full-screen layout */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #6dd5ed, #2193b0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container fills the full height of the page */
+.container {
+  width: 100%;
+  max-width: 1400px;
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card takes up most of the height and width */
+.card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  background-color: #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+/* Card Header with modern style */
+.card-header {
+  padding: 20px;
+  background-color: #f5f7fa;
+  border-bottom: none;
+  text-align: center;
+}
+
+.card-header h5 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+}
+
+/* Table fills the card and has larger fonts */
+.table-responsive {
+  flex-grow: 1;
+  padding: 0;
+  overflow-y: auto;
+}
+
+.table {
+  margin-bottom: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f1f3f5;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #e3e7ea;
+}
+
+/* Table Header */
+.thead-light {
+  background-color: #e9ecef;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+th {
+  padding: 1.5rem;
+  text-align: left;
+}
+
+/* Table Rows */
+td {
+  padding: 1.5rem;
+  vertical-align: middle;
+}
+
+td .avatar {
+  width: 60px;
+  height: 60px;
+}
+
+/* Badges */
+.badge {
+  padding: 0.75em 1em;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badge.bg-success {
+  background-color: #28a745;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545;
+}
+
+.badge.bg-info {
+  background-color: #17a2b8;
+  color: #fff;
+}
+
+/* Actions Dropdown */
+.dropdown-menu {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+  padding: 12px 20px;
+  font-size: 1rem;
+}
+
+.dropdown-toggle {
+  padding: 0.75rem 1rem;
+  background-color: #f8f9fa;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-toggle:hover {
+  background-color: #e9ecef;
+}
+
+/* Button Styles */
+.btn {
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+.btn-light {
+  background-color: #f8f9fa;
+  border: none;
+}
+
+.btn-light:hover {
+  background-color: #e2e6ea;
+}
+
+/* Card Footer (optional) */
+.card-footer {
+  padding: 20px;
+  background-color: #f7f9fc;
+  text-align: right;
+  border-top: none;
+}

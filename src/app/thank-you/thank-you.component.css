@@ -1,0 +1,95 @@
+/* Container for centering the thank you card */
+.thank-you-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  background-color: #f8f9fa; /* Light background color */
+  padding: 0 20px; /* Optional padding for mobile responsiveness */
+}
+
+/* Styling for the thank you card */
+.thank-you-card {
+  background: #ffffff; /* White background for the card */
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1); /* Softer shadow for a modern look */
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  overflow: hidden; /* Ensures rounded corners */
+}
+
+/* Main title styling */
+.thank-you-card .display-3 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #343a40; /* Dark text color */
+}
+
+/* Horizontal rule styling */
+.thank-you-card hr {
+  margin: 20px auto;
+  border: 0;
+  border-top: 2px solid #e9ecef; /* Light gray line */
+  width: 60%; /* Adjust line width */
+}
+
+/* Subtitle styling */
+.thank-you-card .thank-you-title {
+  font-size: 1.5rem;
+  margin-top: 20px;
+  color: #495057; /* Slightly lighter dark color */
+}
+
+/* Message styling */
+.thank-you-card .thank-you-message {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  color: #6c757d; /* Gray color for message */
+}
+
+/* CTA card styling */
+.thank-you-card .cta-card {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  background-color: #e2e6ea; /* Light gray background */
+  padding: 15px;
+  border-radius: 8px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+/* CTA card hover effect */
+.thank-you-card .cta-card:hover {
+  background-color: #d1d3d5; /* Slightly darker gray on hover */
+  transform: scale(1.03); /* Slight scaling effect */
+}
+
+/* CTA content styling */
+.cta-content {
+  display: flex;
+  align-items: center;
+}
+
+/* CTA text styling */
+.cta-text {
+  font-size: 1rem;
+  color: #007bff; /* Primary blue color */
+  margin-right: 10px;
+}
+
+/* Arrow styling */
+.cta-arrow {
+  width: 24px;
+  height: 24px;
+  color: #007bff; /* Match arrow color with text */
+  transition: color 0.3s;
+}
+
+/* Arrow hover effect */
+.cta-card:hover .cta-arrow {
+  color: #0056b3; /* Darker blue on hover */
+}
