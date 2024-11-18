@@ -17,12 +17,18 @@
         </div>
       </div>
 
+
+
+      <!-- Read Form Content Button -->
+      <button class="btn read-btn" (click)="readFormContent()">Read Form Content</button>
+
+
       <!-- Step Container -->
       <div class="step-container">
         <ng-container *ngIf="steps.length > 0">
           <h2 class="step-title">Step {{ currentPage }}: {{ steps[currentPage - 1]?.title }}</h2>
 
-          <div class="question-container" *ngFor="let question of steps[currentPage - 1]?.questions">
+          <div class="question-container" *ngFor="let question of steps[currentPage - 1]?.questions ; let i = index">
             <div [ngSwitch]="question.input.inputType" class="question-block">
 
               <!-- Short answer -->
@@ -33,13 +39,42 @@
                 </label>
                 <input type="text"
                        [attr.name]="'question-' + question.idQuestion"
-                       (input)="handleAnswerChange(question.idQuestion, $event)"
-                       [value]="answers[question.idQuestion] || ''"
+                       (focus)="setCurrentQuestion(question)"
+                       [(ngModel)]="answers[question.idQuestion]"
+                       [ngModelOptions]="{standalone: true}"
+                (input)="handleAnswerChange(question.idQuestion, answers[question.idQuestion])"
                        [ngClass]="{'input-error': isFieldError(question.idQuestion)}"
                        class="form-control" required />
+                <!-- Microphone icon to start recording -->
+                <button type="button" class="mic-btn" (click)="startVoiceRecording(question.idQuestion)">🎤</button>
+
                 <div *ngIf="isFieldError(question.idQuestion)" class="invalid-feedback">
                   This field is required.
                 </div>
+
+                <!-- Suggestions button -->
+                <button type="button" (click)="getSuggestions(question)" class="btn btn-primary mt-2">Get Suggestions</button>
+
+                <div>
+                  <!-- Show/Hide Suggestions Button -->
+                  <button type="button" class="toggle-btn" (click)="toggleSuggestions(question.idQuestion)">
+                    {{ isSuggestionsVisible[question.idQuestion] ? 'Hide' : 'Show' }} Suggestions
+                  </button>
+
+                  <!-- Suggestions section -->
+                  <div *ngIf="isSuggestionsVisible[question.idQuestion]" class="suggestions-list">
+                    <h5>Suggestions:</h5>
+                    <ul>
+                      <li *ngFor="let suggestion of suggestionsMap[question.idQuestion]" class="suggestion-item"
+                          (click)="selectSuggestion(suggestion, question.idQuestion)">
+                        {{ suggestion }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+
+
               </div>
 
               <!-- Paragraph -->
@@ -49,12 +84,36 @@
                   <span *ngIf="question.required" class="required-asterisk">*</span>
                 </label>
                 <textarea [attr.name]="'question-' + question.idQuestion"
+                          [(ngModel)]="answers[question.idQuestion]"
+                          [ngModelOptions]="{standalone: true}"
                           (input)="handleAnswerChange(question.idQuestion, $event)"
-                          [value]="answers[question.idQuestion] || ''"
                           [ngClass]="{'input-error': isFieldError(question.idQuestion)}"
-                          class="form-control" required></textarea>
+                          class="form-control" required>
+</textarea>
+                <!-- Microphone icon to start recording -->
+                <button type="button" class="mic-btn" (click)="startVoiceRecording(question.idQuestion)">🎤</button>
+
                 <div *ngIf="isFieldError(question.idQuestion)" class="invalid-feedback">
                   This field is required.
+                </div>
+
+                <!-- Suggestions button -->
+                <button type="button" (click)="getSuggestions(question)" class="btn btn-primary mt-2">Get Suggestions</button>
+
+                <!-- Show/Hide Suggestions Button -->
+                <button type="button" class="toggle-btn" (click)="toggleSuggestions(question.idQuestion)">
+                  {{ isSuggestionsVisible[question.idQuestion] ? 'Hide' : 'Show' }} Suggestions
+                </button>
+
+                <!-- Suggestions section -->
+                <div *ngIf="isSuggestionsVisible[question.idQuestion]" class="suggestions-list">
+                  <h5>Suggestions:</h5>
+                  <ul>
+                    <li *ngFor="let suggestion of suggestionsMap[question.idQuestion]" class="suggestion-item"
+                        (click)="selectSuggestion(suggestion, question.idQuestion)">
+                      {{ suggestion }}
+                    </li>
+                  </ul>
                 </div>
               </div>
 
@@ -79,7 +138,6 @@
                 </div>
               </div>
 
-
               <!-- Multiple Choice (Radio Buttons) -->
               <div *ngSwitchCase="'Multiple choice'" class="input-group">
                 <label>
@@ -102,7 +160,6 @@
                 </div>
               </div>
 
-
               <!-- Drop-down -->
               <div *ngSwitchCase="'Drop-down'" class="input-group">
                 <label>
@@ -123,8 +180,6 @@
                   This field is required.
                 </div>
               </div>
-
-
             </div>
           </div>
         </ng-container>
@@ -139,10 +194,6 @@
         <span>Page {{ currentPage }} of {{ totalPages }}</span>
         <button type="button" class="btn" (click)="nextPage()" [disabled]="currentPage === totalPages || !isPageValid()">Next</button>
       </div>
-
-
-
-
     </form>
   </div>
 </div>

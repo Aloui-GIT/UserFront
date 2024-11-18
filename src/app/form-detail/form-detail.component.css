@@ -12,14 +12,13 @@ body {
 
 .form-info-container {
   flex: 1;
-  background-color: #343a40; /* Dark background */
+  background-color: #343a40;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 40px;
   box-shadow: inset -2px 0px 10px rgba(0, 0, 0, 0.2);
-  position: relative;
 }
 
 .info-text {
@@ -48,7 +47,6 @@ body {
   justify-content: center;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  position: relative;
 }
 
 .form-header {
@@ -59,7 +57,7 @@ body {
 }
 
 .back-button {
-  background-color: #6c757d; /* Grey background */
+  background-color: #6c757d;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -69,16 +67,17 @@ body {
 }
 
 .back-button:hover {
-  background-color: #5a6268; /* Darker grey on hover */
+  background-color: #5a6268;
 }
 
 .form-title {
   font-size: 24px;
   font-weight: bold;
-  color: #343a40; /* Dark text */
+  color: #343a40;
 }
 
-.step-container {
+.step-container,
+.options-container {
   margin-bottom: 30px;
 }
 
@@ -108,7 +107,7 @@ body {
 }
 
 .input-error {
-  border-color: #dc3545; /* Red border */
+  border-color: #dc3545;
 }
 
 .invalid-feedback {
@@ -119,10 +118,6 @@ body {
 .required-asterisk {
   color: #dc3545;
   margin-left: 5px;
-}
-
-.options-container {
-  margin-top: 10px;
 }
 
 .form-check {
@@ -139,9 +134,9 @@ body {
   margin-top: 20px;
 }
 
-.pagination-controls button {
+.pagination-controls .btn {
   padding: 10px 15px;
-  background-color: #007bff; /* Primary button color */
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
@@ -149,43 +144,207 @@ body {
   transition: background-color 0.3s;
 }
 
-.pagination-controls button:disabled {
-  background-color: #6c757d; /* Grey background for disabled button */
+.pagination-controls .btn:disabled {
+  background-color: #6c757d;
+}
+
+.pagination-controls span {
+  font-weight: bold;
+  margin: 0 10px;
 }
 
 .submit-button {
-  padding: 12px 20px;
-  background-color: #28a745; /* Green */
+  background-color: #28a745;
   color: white;
+  padding: 10px 15px;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
+  font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-top: 20px;
   width: 100%;
+  margin-top: 20px;
 }
 
 .submit-button:hover {
-  background-color: #218838; /* Darker green */
+  background-color: #218838;
 }
+
 .error-message {
   color: #dc3545;
   margin-top: 20px;
   font-weight: bold;
 }
+
 .progress {
-  background-color: #e9ecef; /* Light grey background */
-  border-radius: 5px; /* Rounded corners */
-  height: 20px; /* Height of the progress bar */
-  margin-bottom: 20px; /* Spacing below the progress bar */
+  background-color: #e9ecef;
+  border-radius: 5px;
+  height: 20px;
+  margin-bottom: 20px;
 }
 
 .progress-bar {
-  background-color: #007bff; /* Blue color for the filled part */
-  height: 100%; /* Fill the height of the progress container */
-  color: white; /* Text color */
-  text-align: center; /* Center the text inside the progress bar */
-  transition: width 0.4s ease; /* Smooth transition for the width change */
-  border-radius: 5px; /* Rounded corners */
+  background-color: #007bff;
+  height: 100%;
+  color: white;
+  text-align: center;
+  transition: width 0.4s ease;
+  border-radius: 5px;
 }
 
+.suggestions-wrapper {
+  margin-top: 15px;
+}
+
+.suggestions-list {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.suggestions-list h5 {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #444;
+}
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
+.suggestion-item.active {
+  background-color: #e0e0e0;
+}
+
+.input-with-mic {
+  display: flex;
+  align-items: center;
+}
+
+.mic-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em;
+  margin-left: 8px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #FFA500;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #e69500;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.read-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.read-btn:hover {
+  background-color: #45a049;
+}
+
+.mic-btn {
+  background-color: #FF6347;
+  color: white;
+  padding: 8px;
+  border-radius: 50%;
+  margin-left: 8px;
+}
+
+.mic-btn:hover {
+  background-color: #e3533f;
+}
+
+.toggle-btn {
+  background-color: #FFD700;
+  color: black;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+.toggle-btn:hover {
+  background-color: #e6c200;
+}
+/* Primary Button */
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  color: #fff;
+}
+
+/* Light Button */
+.btn-light {
+  background-color: #e2e6ea;
+  color: #333;
+  border: none;
+}
+
+.btn-light:hover {
+  background-color: #d6d8db;
+  color: #333;
+}
+
+/* Danger Button */
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  color: #fff;
+}

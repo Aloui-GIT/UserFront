@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormService } from '../Services/Form/form.service';
 import { StepService } from '../Services/Step/step.service';
@@ -16,6 +16,8 @@ import { Option } from '../Model/Option/option';
 import { AnswerDto } from '../Model/DTO/AnswerDto';
 import { SubmissionDto } from '../Model/DTO/SubmissionDto';
 import { ToastrService } from 'ngx-toastr';
+import { OpenAIService } from '../Services/OpenAI/open-ai.service';
+import {AbstractControl, FormArray , FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-form-detail',
@@ -31,6 +33,31 @@ export class FormDetailComponent implements OnInit {
   startTime!: Date; // Start time of the form
   currentPage: number = 1;
   totalPages: number = 0;
+  userInput!: string;  // or appropriate type
+  suggestions: string[] = [];
+  currentQuestion: Question | null = null; // Store the selected question
+  suggestionsMap: { [questionId: number]: string[] } = {}; // Keyed by questionId
+
+  idfoorm = +this.route.snapshot.paramMap.get('id')!;
+
+  // Added indexes
+  currentStepIndex: number = 0; // Tracks the current step
+  currentQuestionIndex: number = 0; // Tracks the current question
+
+
+  availableVoices: SpeechSynthesisVoice[] = [];
+  selectedVoiceName: string = ''; // Stores selected voice name
+  formGroup!: FormGroup;
+
+
+  private readonly TIME_LIMIT = 30000; // 30 seconds
+  private attempts: number = 0; // To track the number of attempts
+  private answerTimeoutId: any; // To store the timeout ID
+  isListening: boolean = false; // Track whether the app is currently listening
+   recognition: any; // Store recognition instance
+
+
+  isSuggestionsVisible: { [key: number]: boolean } = {};
 
   constructor(
     private formService: FormService,
@@ -42,62 +69,161 @@ export class FormDetailComponent implements OnInit {
     private answerService: AnswerService,
     private route: ActivatedRoute,
     private router: Router,
-    private toastr: ToastrService
-  ) { this.startTime = new Date();}
+    private toastr: ToastrService,
+    private aiService: OpenAIService,
+    private cd: ChangeDetectorRef,
+    private fb: FormBuilder
+  ) {
+    this.startTime = new Date();
+  }
 
   ngOnInit(): void {
     const id = +this.route.snapshot.paramMap.get('id')!;
+
+    this.loadVoices();
+
+    this.initializeSpeechRecognition();
+
     this.stepService.getStepCount(id).subscribe(
       count => {
-        this.totalPages = count; // Set total pages based on step count
-
-        // Fetch steps once you have the count
+        this.totalPages = count;
         this.formService.getFormById(id).subscribe(
           form => {
-            this.steps = form.steps; // Assuming `form.steps` is an array of `Step` objects
-            // Ensure the current page does not exceed the total pages
-            if (this.currentPage > this.totalPages) {
-              this.currentPage = this.totalPages;
+            if (form) {
+              this.form = form;
+              this.loadStepsAndQuestions(id);
+            } else {
+              this.handleFormNotAvailable();
             }
           },
           error => {
-            // Handle error logic as before
+            console.error('Error fetching form:', error);
+            this.handleFormNotAvailable();
           }
         );
       },
       error => {
-        // Handle error for step count
+        console.error('Error fetching step count:', error);
       }
     );
-    // First attempt to fetch the form by ID
-    this.formService.getFormById(id).subscribe(
-      form => {
-        if (form) {
-          this.form = form;
-          this.loadStepsAndQuestions(id);
-        } else {
-          this.handleFormNotAvailable();
+  }
+
+
+  // Method to toggle the visibility of suggestions for a question
+  toggleSuggestions(questionId: number): void {
+    // Toggle the visibility status for the specific question ID
+    this.isSuggestionsVisible[questionId] = !this.isSuggestionsVisible[questionId];
+  }
+
+
+  initializeSpeechRecognition() {
+    if ('webkitSpeechRecognition' in window) {
+      this.recognition = new (window as any).webkitSpeechRecognition();
+      this.recognition.continuous = false; // Stops after one result
+      this.recognition.interimResults = false; // Only final results
+      this.recognition.lang = 'en-US'; // Language setting
+
+      this.recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        console.log('Speech recognition result:', transcript);
+
+        // Check if currentQuestion is not null before assigning the answer
+        if (this.currentQuestion && this.currentQuestion.idQuestion !== undefined) {
+          this.answers[this.currentQuestion.idQuestion] = transcript; // Set the answer
+          this.cd.detectChanges(); // Manually trigger change detection
         }
-      },
-      error => {
-        console.error('Error fetching form:', error);
-        this.handleFormNotAvailable();
+      };
+
+      this.recognition.onerror = (event: any) => {
+        console.error('Speech Recognition Error', event);
+      };
+    } else {
+      console.error('Speech Recognition is not supported in this browser.');
+    }
+  }
+
+
+
+  startVoiceRecording(questionId: number) {
+    // Find the selected question by ID
+    this.currentQuestion = this.steps.flatMap(step => step.questions).find(q => q.idQuestion === questionId) || null;
+    console.log('Starting voice recording for question:', questionId, 'Current question:', this.currentQuestion);
+
+    if (this.recognition && this.currentQuestion) {
+      try {
+        this.recognition.start(); // Start recording
+      } catch (err) {
+        console.error('Error starting voice recognition:', err);
       }
-    );
-  }
-
-
-  previousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
+    } else {
+      console.warn('No valid question selected or recognition not available');
     }
   }
 
-  nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
+
+
+  loadVoices() {
+    const synth = window.speechSynthesis;
+    if (synth.onvoiceschanged !== undefined) {
+      synth.onvoiceschanged = () => {
+        this.availableVoices = synth.getVoices();
+        console.log(this.availableVoices); // Log all available voices
+      };
+    } else {
+      this.availableVoices = synth.getVoices();
+      console.log(this.availableVoices); // Log all available voices
     }
   }
+
+
+  readFormContent() {
+    const synth = window.speechSynthesis;
+    let textToRead = `Welcome to the form titled "${this.form.title}". ${this.form.description}.`;
+
+    let questionCounter = 1; // Initialize a separate counter for questions
+
+    this.steps.forEach((step, index) => {
+      textToRead += ` Step ${index + 1}: ${step.title}. `;
+      step.questions.forEach((question: any) => {
+        textToRead += `Question ${questionCounter}: ${question.question}. `;
+        questionCounter++; // Increment the question counter for each question
+      });
+    });
+
+    // Create a new speech utterance with the text to read
+    const utterance = new SpeechSynthesisUtterance(textToRead);
+
+    // Automatically pick a voice that is different and possibly better than the default one
+    const defaultVoice = this.availableVoices.find(voice => voice.name === "Google UK English Female"); // This is your current voice (you can change this as needed)
+    const betterVoice = this.availableVoices.find(voice => voice.name !== defaultVoice?.name && voice.lang.startsWith('en')); // Finds a different English voice
+
+    // If a better voice is found, use it
+    if (betterVoice) {
+      utterance.voice = betterVoice;
+    } else {
+      // If no better voice is found, fallback to any available voice
+      utterance.voice = this.availableVoices[0] || null;
+    }
+
+    // Speak the utterance
+    synth.speak(utterance);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   handleFormNotAvailable() {
     // Show the toastr message
@@ -127,6 +253,68 @@ export class FormDetailComponent implements OnInit {
       }
     );
   }
+
+  selectSuggestion(suggestion: string, questionId: number): void {
+    this.answers[questionId] = suggestion; // Update the answer for the specified question ID with the selected suggestion
+  }
+
+
+
+  setCurrentQuestion(question: Question): void {
+    this.currentQuestion = question; // Set the selected question
+  }
+
+// Method to fetch suggestions for a specific question
+  getSuggestions(question: Question): void {
+    const questionId = question.idQuestion as number; // Get the ID of the current question
+    const userInput = this.answers[questionId] || ''; // Get the current input from the user for this question
+
+    // Prepare the request payload
+    const requestData = {
+      title: this.form?.title || '',         // Fallback to empty string if form or title is undefined
+      description: this.form?.description || '',  // Fallback to empty string if description is undefined
+      questionId: questionId,
+      userInput: userInput
+    };
+
+    // Log the request data (for debugging purposes)
+    console.log('Sending data to backend for suggestions:', requestData);
+
+    // Call the AI service to get suggestions for the current question
+    this.aiService.getSuggestionsCohere(requestData.title, requestData.description, requestData.questionId, requestData.userInput)
+      .subscribe(
+        (data: string[]) => {
+          this.suggestionsMap[questionId] = data; // Store the suggestions for the specific question in the map
+          console.log('Suggestions received for question', questionId, ':', this.suggestionsMap[questionId]);
+        },
+        (error) => {
+          console.error('Error fetching suggestions from the AI service:', error); // Log any error encountered
+        }
+      );
+  }
+
+
+
+  // Make sure to call onUserInputChange when userInput changes
+  handleInputChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.userInput = target.value;  // Update userInput with the current input value
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+
+
 
 
   loadStepsAndQuestions(formId: number): void {
@@ -195,6 +383,8 @@ export class FormDetailComponent implements OnInit {
       }
     });
   }
+
+
 
   handleAnswerChange(questionId: number | undefined, event: Event): void {
     if (questionId !== undefined) {
